@@ -1,24 +1,22 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const dotenv = require('dotenv');
+// backend/server.js
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import dotenv from 'dotenv';
+import userRoutes from './routes/userRoutes.js';
 
-dotenv.config();
+dotenv.config({path : "backend/config/config.env"});
 
-const app =express();
+const app = express();
 
 app.use(cors());
 app.use(express.json());
-
-const userRoutes = require('./routes/userRoutes');
 app.use('/api/users', userRoutes);
+console.log(process.env.MONGO_URI)
 
-mongoose.connect(process.env.MONGO_URL, {
-    userNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log('MongoDB Connected');
-}).catch(err=> {
+}).catch(err => {
     console.log('MongoDB connection Error: ', err);
 });
 
